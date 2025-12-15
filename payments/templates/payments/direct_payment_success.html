@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Successful{% endblock %}
+
+{% block extra_head %}
+<style>
+    .payment-loader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 400px;
+    }
+    
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .success-animation {
+        display: none;
+    }
+    
+    .checkmark {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 2;
+        stroke: #4bb71b;
+        stroke-miterlimit: 10;
+        box-shadow: inset 0px 0px 0px #4bb71b;
+        animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+    }
+    
+    .checkmark__circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 2;
+        stroke-miterlimit: 10;
+        stroke: #4bb71b;
+        fill: none;
+        animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+    
+    .checkmark__check {
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+    
+    @keyframes stroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+    
+    @keyframes scale {
+        0%, 100% {
+            transform: none;
+        }
+        50% {
+            transform: scale3d(1.1, 1.1, 1);
+        }
+    }
+    
+    @keyframes fill {
+        100% {
+            box-shadow: inset 0px 0px 0px 30px #4bb71b;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="payment-loader" id="paymentLoader">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Processing...</span>
+                </div>
+                <h4 class="text-primary">Processing your payment...</h4>
+                <p class="text-muted">Please wait while we confirm your payment</p>
+            </div>
+            
+            <div class="success-animation text-center p-5" id="successSection">
+                <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                    <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                    <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                </svg>
+                
+                <h2 class="text-success mb-4">Payment Successful!</h2>
+                <p class="lead">Thank you for your purchase!</p>
+                <p>Your order #{{ order.id }} has been successfully placed and is now being processed.</p>
+                <p>You will receive an email confirmation shortly.</p>
+                
+                <div class="mt-4">
+                    <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-primary me-2">View Your Order</a>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Simulate payment processing and show success
+    setTimeout(function() {
+        document.getElementById('paymentLoader').style.display = 'none';
+        document.getElementById('successSection').style.display = 'block';
+    }, 2000);
+</script>
+{% endblock %}
